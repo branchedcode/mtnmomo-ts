@@ -1,0 +1,25 @@
+extends:
+  - 'typescript-shareable'
+
+parserOptions:
+  project: './tsconfig.json'
+
+env:
+  browser: false
+  es6: true
+  node: true
+
+rules:
+  '@typescript-eslint/no-floating-promises': off # temporary disable the rule as until false positive is fixed
+  '@typescript-eslint/no-misused-promises': off
+  'import/order':
+    - 'error'
+    - groups:
+        - external
+        - internal
+      pathGroupsExcludedImportTypes:
+        - builtin
+      newlines-between: always
+  'import/no-cycle':
+    - 'error'
+    - maxDepth: 5
