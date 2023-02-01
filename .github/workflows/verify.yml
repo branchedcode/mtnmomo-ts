@@ -5,9 +5,9 @@ name: Verify
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 env:
   QA_ARTIFACT_NAME: 'ADA-BASE-${{ github.event.pull_request.number }}'
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['16', '18']
+        node-version: ['18']
 
     steps:
       - uses: actions/checkout@v3
@@ -49,6 +49,7 @@ jobs:
 
       - name: Unit testing
         run: yarn test # run unit tests
+
 
       # - name: Test build
       #   run: yarn build --prod
