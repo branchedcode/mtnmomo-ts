@@ -3,15 +3,19 @@ extends:
 
 parserOptions:
   project: './tsconfig.json'
+  ecmaVersion: 'latest'
 
 env:
-  browser: false
+  browser: true
   es6: true
-  node: true
+  # node: true
 
 rules:
+  '@typescript-eslint/explicit-function-return-type':
+    - error
   '@typescript-eslint/no-floating-promises': off # temporary disable the rule as until false positive is fixed
   '@typescript-eslint/no-misused-promises': off
+  'functional/no-method-signature': off
   'import/order':
     - 'error'
     - groups:
