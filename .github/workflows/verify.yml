@@ -1,20 +1,18 @@
 # Run linting, unit tests, check build is possible. Standard requirements
 # that should always be green. Tested on NodeJS LTS and current stable.
 
-name: Verify
+name: CI
 
 on:
   push:
-    branches: ['main']
   pull_request:
-    branches: ['main']
-
-env:
-  QA_ARTIFACT_NAME: 'ADA-BASE-${{ github.event.pull_request.number }}'
+    branches: main
 
 jobs:
-  unit-tests:
+  check:
+    name: Checks
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
       matrix:
         node-version: ['18']
@@ -36,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Build scripts and generate types
+      - name: Build project
         run: yarn build
 
       - name: Check that no new files to be committed
@@ -49,22 +47,3 @@ jobs:
 
       - name: Unit testing
         run: yarn test # run unit tests
-
-
-      # - name: Test build
-      #   run: yarn build --prod
-
-      # - name: Create test release
-      #   if: ${{ matrix.node-version == '18' && github.event_name == 'pull_request' }}
-      #   run: |
-      #     ## Creates a zip file and uploads it to artifactory
-      #     # under "web-ada-testing" folder
-      #     yarn zip --name ${QA_ARTIFACT_NAME}
-      #     # Replace all non alphanumeric characters with a '_'
-      #     QA_ARTIFACT_TITLE=$(echo "${{github.event.pull_request.title}}" | tr -s -c [a-zA-Z0-9] _)
-      #     # Adds all properties which should be stored together with the bundle
-      #     QA_ARTIFACT_PROPERTIES="commit.title=${QA_ARTIFACT_TITLE};"
-      #     # Set up the url
-      #     QA_ARTIFACT_URL="https://artifactory.se.axis.com/artifactory/web-ada-testing/zipFiles/QA/${QA_ARTIFACT_NAME}.zip"
-      #     # Deploy the artifact
-      #     curl --fail -X PUT "${QA_ARTIFACT_URL};${QA_ARTIFACT_PROPERTIES}" -T output/${QA_ARTIFACT_NAME}.zip
