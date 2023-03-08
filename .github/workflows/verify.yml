@@ -37,6 +37,9 @@ jobs:
       - name: Build project
         run: yarn build
 
+      - name: Build docs
+        run: yarn run build:docs
+
       - name: Check that no new files to be committed
         run: git diff --exit-code
 
