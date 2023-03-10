@@ -1,6 +1,7 @@
 coverage
 build
 dist
+docs
 
 **/__generated__/**
 

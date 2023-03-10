@@ -34,9 +34,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Build project
-        run: yarn build
-
       - name: Check that no new files to be committed
         run: git diff --exit-code
 
@@ -47,3 +44,9 @@ jobs:
 
       - name: Unit testing
         run: yarn test # run unit tests
+
+      - name: Build docs
+        run: yarn run build:docs
+
+      - name: Build project
+        run: yarn build
