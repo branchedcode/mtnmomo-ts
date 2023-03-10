@@ -1,0 +1,19 @@
+{
+  "$schema": "https://typedoc.org/schema.json", //autocompletion
+  "entryPoints": ["./src/index.ts"],
+  "out": "docs",
+  "excludeNotDocumented": true,
+  "excludeNotDocumentedKinds": ["Property", "Interface", "TypeAlias"],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "includeVersion": true,
+  "readme": "none",
+  "gitRevision": "main",
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "treatWarningsAsErrors": true,
+  "requiredToBeDocumented": ["Enum", "Class"]
+}
