@@ -31,3 +31,5 @@ export interface MomoClientOptions {
   readonly 'API-Key': string
   readonly 'X-Reference-Id': string
 }
+
+export interface ICollection{}
