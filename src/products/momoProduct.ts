@@ -1,3 +1,5 @@
+//import fetch from 'node-fetch'
+
 import {XTargetEnvironment,CreateAccessToken} from '../types'
 import {isNullOrUndefined} from '../utils'
 
@@ -75,5 +77,4 @@ export abstract class MomoProduct{
   return access_token
 }
 
-// TODO - Check if authorization token is expired
 }
