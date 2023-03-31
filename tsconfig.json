@@ -22,5 +22,5 @@
     "sourceMap": true
   },
   "exclude": [],
-  "include": ["src"]
+  "include": ["src","tsup.config.ts"]
 }
