@@ -62,8 +62,7 @@ export abstract class MomoProduct{
     },
   })
 
-  const { access_token, token_type, expires_in } =
-    (await response.data) as CreateAccessToken
+  const { access_token } =(await response.data)as CreateAccessToken
 
   return access_token
 }
