@@ -1,11 +1,11 @@
-//import fetch from 'node-fetch'
+import axios from 'axios';
 
 import {XTargetEnvironment,CreateAccessToken} from '../types'
 import {isNullOrUndefined} from '../utils'
 
 export abstract class MomoProduct{
  private readonly BASE_URL = 'https://momodeveloper.mtn.com'
- private readonly SANDBOX_BASE_URL = 'https://sandbox.momodeveloper.com'
+ private readonly SANDBOX_BASE_URL = 'https://sandbox.momodeveloper.mtn.com'
  protected TOKEN_EXPIRY_MS=3600
  protected readonly momoProduct:string
  protected 'X-Target-Environment': XTargetEnvironment
@@ -48,16 +48,13 @@ export abstract class MomoProduct{
     return this.authorizationToken
   }
 
-  // Base64 string
-
   const base64String = Buffer.from(
     `${this['X-Reference-Id']}:${this['API-Key']}`
   ).toString('base64')
 
-  const tokenEndpoint =`${this.generateUrl()}/token`
+  const tokenEndpoint =`${this.generateUrl()}/token/`;
 
-   // TODO: implement fetch
-  const response = await fetch(tokenEndpoint, {
+  const response = await axios(tokenEndpoint, {
     method: 'POST',
     headers: {
       Authorization: `Basic ${base64String}`,
@@ -65,14 +62,7 @@ export abstract class MomoProduct{
     },
   })
 
-  const { access_token, token_type, expires_in } =
-    (await response.json()) as CreateAccessToken
-
-  console.log({
-    access_token,
-    token_type,
-    expires_in,
-  })
+  const { access_token } =(await response.data)as CreateAccessToken
 
   return access_token
 }
