@@ -1,4 +1,5 @@
 import axios from 'axios'
+import axios from 'axios'
 
 import { XTargetEnvironment } from '../types'
 import { isNullOrUndefined } from '../utils'
@@ -43,6 +44,7 @@ export abstract class MomoProduct {
       `${this['X-Reference-Id']}:${this['API-Key']}`
     ).toString('base64')
 
+    const tokenEndpoint = `${this.generateUrl()}/token/`
     const tokenEndpoint = `${this.generateUrl()}/token/`
 
     const response = await axios({
