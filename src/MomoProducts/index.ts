@@ -1,2 +1,2 @@
 export * from './momoProduct'
-export * from './collection'
+export * from './collection/collection'

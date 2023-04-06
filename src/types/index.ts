@@ -27,9 +27,23 @@ export interface CreateAccessToken {
 export interface MomoClientOptions {
   readonly 'X-Target-Environment': XTargetEnvironment
   readonly 'Ocp-Apim-Subscription-Key': string
-  readonly Authorization?: string
   readonly 'API-Key': string
   readonly 'X-Reference-Id': string
+  readonly 'X-Callback-Url'?:string | undefined
 }
 
-export interface ICollection{}
+export interface RequestToPayOptions{
+  readonly 'amount':string
+  readonly "currency":string
+  readonly "externalId":string
+  readonly "payer":{
+    readonly "partyIdType":'MSISDN' | 'EMAIL' | 'PARTY_CODE'
+    readonly "partyId":string
+  }
+  readonly "payerMessage":string
+  readonly "payeeNote":string
+}
+
+export interface ICollection{
+  requestToPay(options:RequestToPayOptions):Promise<void>
+}
