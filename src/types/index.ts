@@ -44,6 +44,33 @@ export interface RequestToPayOptions{
   readonly "payeeNote":string
 }
 
+interface RequestToPayData {
+  readonly status_code: number;
+  readonly message: string;
+  readonly referenceId: string;
+};
+
+interface MomoError{
+  readonly status_code: number;
+  readonly message: string;
+};
+
+export interface RequestToPayResponse {
+  readonly data: RequestToPayData | null;
+  readonly error: MomoError | null;
+};
+
+export interface RequestToPayHeaders {
+  readonly [header: string]: string | undefined;
+  readonly "Content-Type": string;
+  readonly "Ocp-Apim-Subscription-Key": string;
+  readonly "X-Reference-Id": string;
+  readonly "X-Target-Environment": XTargetEnvironment;
+  readonly "Authorization": string;
+  readonly "X-Callback-Url"?: string;
+}
+
+
 export interface ICollection{
-  requestToPay(options:RequestToPayOptions):Promise<void>
+  requestToPay(options:RequestToPayOptions):Promise<RequestToPayResponse>
 }
