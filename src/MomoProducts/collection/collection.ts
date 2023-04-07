@@ -1,5 +1,5 @@
-import axios from 'axios'
-import { v4 as uuid4 } from 'uuid'
+import axios from 'axios';
+import {v4 as uuid4} from 'uuid';
 
 import {
   MomoClientOptions,
@@ -10,9 +10,10 @@ import {
   RequestToPayHeaders,
   RequestToPayTransactionStatus,
 } from '../../types'
-import { CollectionEndPoints } from './endpoints'
+import {CollectionEndPoints} from './endpoints'
+import { isNullOrUndefined } from '../../utils';
 import { MomoProduct } from '../momoProduct'
-import { isNullOrUndefined } from '../../utils'
+
 
 export class Collection extends MomoProduct implements ICollection {
   public constructor(options: MomoClientOptions) {

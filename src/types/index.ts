@@ -82,7 +82,7 @@ export interface RequestToPayHeaders {
   readonly 'X-Callback-Url'?: string
 }
 
-export interface ICollection {
+export interface ICollection{
   requestToPay(options: RequestToPayOptions): Promise<MomoResponse<RequestToPayData>>
   requestToPayTransactionStatus(
     referenceId: string
