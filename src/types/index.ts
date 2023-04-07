@@ -82,9 +82,23 @@ export interface RequestToPayHeaders {
   readonly 'X-Callback-Url'?: string
 }
 
-export interface ICollection{
-  requestToPay(options: RequestToPayOptions): Promise<MomoResponse<RequestToPayData>>
+export interface BasicUserInfo {
+  readonly sub: string
+  readonly name: string
+  readonly given_name: string
+  readonly family_name: string
+  readonly birthdate: Date
+  readonly locale: string
+  readonly gender: string
+  readonly updated_at: number
+}
+
+export interface ICollection {
+  requestToPay(
+    options: RequestToPayOptions
+  ): Promise<MomoResponse<RequestToPayData>>
   requestToPayTransactionStatus(
     referenceId: string
   ): Promise<MomoResponse<RequestToPayTransactionStatus>>
+  getBasicUserInfo(accountHolderMSISDN:string): Promise<MomoResponse<BasicUserInfo>>
 }
