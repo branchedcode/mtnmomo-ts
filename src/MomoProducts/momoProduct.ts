@@ -1,5 +1,4 @@
 import axios from 'axios'
-import axios from 'axios'
 
 import { XTargetEnvironment } from '../types'
 import { isNullOrUndefined } from '../utils'
@@ -20,7 +19,7 @@ export abstract class MomoProduct {
     this.momoProduct = this.constructor.name.toLowerCase()
   }
 
-  protected generateUrl(): string {
+  protected generateUrl = (): string => {
     return `${
       this['X-Target-Environment'] === 'sandbox'
         ? this.SANDBOX_BASE_URL
@@ -28,7 +27,7 @@ export abstract class MomoProduct {
     }/${this.momoProduct}`
   }
 
-  private isTokenExpired(): boolean {
+  private readonly isTokenExpired = (): boolean => {
     const now = new Date()
     const timeLeft = this.tokenExpiry
       ? this.tokenExpiry.getTime() - now.getTime()
@@ -36,7 +35,7 @@ export abstract class MomoProduct {
     return timeLeft <= 60000
   }
 
-  protected async getAuthorizationToken(): Promise<void> {
+  protected getAuthorizationToken = async (): Promise<void> => {
     if (!isNullOrUndefined(this.authorizationToken) && !this.isTokenExpired()) {
       return
     }
@@ -44,7 +43,6 @@ export abstract class MomoProduct {
       `${this['X-Reference-Id']}:${this['API-Key']}`
     ).toString('base64')
 
-    const tokenEndpoint = `${this.generateUrl()}/token/`
     const tokenEndpoint = `${this.generateUrl()}/token/`
 
     const response = await axios({

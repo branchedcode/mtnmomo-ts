@@ -5,8 +5,10 @@ import {
   MomoClientOptions,
   ICollection,
   RequestToPayOptions,
-  RequestToPayResponse,
+  MomoResponse,
+  RequestToPayData,
   RequestToPayHeaders,
+  RequestToPayTransactionStatus,
 } from '../../types'
 import { CollectionEndPoints } from './endpoints'
 import { MomoProduct } from '../momoProduct'
@@ -22,35 +24,36 @@ export class Collection extends MomoProduct implements ICollection {
     this['X-Callback-Url'] = options['X-Callback-Url']
   }
 
-  public async requestToPay(
+  public requestToPay = async (
     options: RequestToPayOptions
-  ): Promise<RequestToPayResponse> {
+  ): Promise<MomoResponse<RequestToPayData>> => {
     const requestToPayEndPoint = `${this.generateUrl()}/${
       CollectionEndPoints.REQUEST_TO_PAY
     }`
 
     const referenceId = uuid4()
 
-    let requestToPayHeaders: RequestToPayHeaders = {
-      Authorization: this.authorizationToken as string,
-      'Content-Type': 'application/json',
-      'X-Target-Environment': this['X-Target-Environment'],
-      'X-Reference-Id': referenceId,
-      'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
-    }
-
-    if (
-      !isNullOrUndefined(this['X-Callback-Url']) &&
-      this['X-Target-Environment'] === 'live'
-    ) {
-      requestToPayHeaders = {
-        ...requestToPayHeaders,
-        'X-Callback-Url': this['X-Callback-Url'],
-      }
-    }
-
     try {
       await this.getAuthorizationToken()
+
+      let requestToPayHeaders: RequestToPayHeaders = {
+        Authorization: this.authorizationToken as string,
+        'Content-Type': 'application/json',
+        'X-Target-Environment': this['X-Target-Environment'],
+        'X-Reference-Id': referenceId,
+        'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
+      }
+
+      if (
+        !isNullOrUndefined(this['X-Callback-Url']) &&
+        this['X-Target-Environment'] === 'live'
+      ) {
+        requestToPayHeaders = {
+          ...requestToPayHeaders,
+          'X-Callback-Url': this['X-Callback-Url'],
+        }
+      }
+
       const response = await axios(requestToPayEndPoint, {
         method: 'POST',
         data: options,
@@ -69,7 +72,46 @@ export class Collection extends MomoProduct implements ICollection {
       const err = error.response ? error.response : error
       return {
         data: null,
-        error: { status_code: err.status, message: err.statusText },
+        error: {
+          status_code: err.status,
+          status_text: err.statusText,
+          message: err.message,
+        },
+      }
+    }
+  }
+
+  public requestToPayTransactionStatus = async (
+    referenceId: string
+  ): Promise<MomoResponse<RequestToPayTransactionStatus>> => {
+    const endPoint = `${this.generateUrl}/${CollectionEndPoints.REQUEST_TO_PAY_TRANSACTION_STATUS}/${referenceId}`
+
+    try {
+      await this.getAuthorizationToken()
+      const response = await axios(endPoint, {
+        method: 'GET',
+        headers: {
+          Authorization: this.authorizationToken as string,
+          'X-Target-Environment': this['X-Target-Environment'],
+          'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
+        },
+      })
+
+      const { data } = response
+
+      return {
+        data,
+        error: null,
+      }
+    } catch (error: any) {
+      const err = error.response ? error.response : error
+      return {
+        data: null,
+        error: {
+          status_code: err.status,
+          status_text: err.statusText,
+          message: error.message,
+        },
       }
     }
   }
