@@ -1,5 +1,5 @@
-import axios from 'axios';
-import {v4 as uuid4} from 'uuid';
+import axios from 'axios'
+import { v4 as uuid4 } from 'uuid'
 
 import {
   MomoClientOptions,
@@ -9,11 +9,11 @@ import {
   RequestToPayData,
   RequestToPayHeaders,
   RequestToPayTransactionStatus,
+  BasicUserInfo,
 } from '../../types'
-import {CollectionEndPoints} from './endpoints'
-import { isNullOrUndefined } from '../../utils';
+import { CollectionEndPoints } from './endpoints'
+import { isNullOrUndefined } from '../../utils'
 import { MomoProduct } from '../momoProduct'
-
 
 export class Collection extends MomoProduct implements ICollection {
   public constructor(options: MomoClientOptions) {
@@ -85,7 +85,9 @@ export class Collection extends MomoProduct implements ICollection {
   public requestToPayTransactionStatus = async (
     referenceId: string
   ): Promise<MomoResponse<RequestToPayTransactionStatus>> => {
-    const endPoint = `${this.generateUrl}/${CollectionEndPoints.REQUEST_TO_PAY_TRANSACTION_STATUS}/${referenceId}`
+    const endPoint = `${this.generateUrl()}/${
+      CollectionEndPoints.REQUEST_TO_PAY_TRANSACTION_STATUS
+    }/${referenceId}`
 
     try {
       await this.getAuthorizationToken()
@@ -104,6 +106,43 @@ export class Collection extends MomoProduct implements ICollection {
         data,
         error: null,
       }
+    } catch (error: any) {
+      const err = error.response ? error.response : error
+      return {
+        data: null,
+        error: {
+          status_code: err.status,
+          status_text: err.statusText,
+          message: error.message,
+        },
+      }
+    }
+  }
+
+  public getBasicUserInfo = async (
+    accountHolderMSISDN: string
+  ): Promise<MomoResponse<BasicUserInfo>> => {
+    const endPoint = `${this.generateUrl()}/${
+      CollectionEndPoints.GET_BASIC_USER_INFO
+    }/${accountHolderMSISDN}/basicuserinfo`
+
+    try {
+      await this.getAuthorizationToken()
+
+      const response = await axios(endPoint, {
+        method: 'GET',
+        headers: {
+          Authorization: this.authorizationToken as string,
+          'X-Target-Environment': this['X-Target-Environment'],
+          'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
+        },
+      })
+
+      const { data } = response
+      return {
+        data,
+        error: null,
+      } 
     } catch (error: any) {
       const err = error.response ? error.response : error
       return {
