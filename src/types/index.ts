@@ -100,14 +100,18 @@ export interface AccountBalanceData {
   readonly currency: string
 }
 
-export interface AccountHolder{
-  readonly accountHolderId:string,
-  readonly accountHolderIdType:PartyId
+export interface AccountHolder {
+  readonly accountHolderId: string
+  readonly accountHolderIdType: PartyId
 }
 
-export interface AccountHolderStatus{
-  readonly result:boolean
+export interface AccountHolderStatus {
+  readonly result: boolean
 }
+
+export interface RequestToWithdrawOptions extends RequestToPayOptions {}
+export interface RequestToWithdrawData extends RequestToPayData {}
+export interface RequestToWithdrawHeaders extends RequestToPayHeaders{}
 
 export interface ICollection {
   requestToPay(
@@ -120,5 +124,10 @@ export interface ICollection {
     accountHolderMSISDN: string
   ): Promise<MomoResponse<BasicUserInfo>>
   getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
-  validateAccountHolderStatus(options:AccountHolder):Promise<MomoResponse<AccountHolderStatus>>
+  validateAccountHolderStatus(
+    options: AccountHolder
+  ): Promise<MomoResponse<AccountHolderStatus>>
+  requestToWithdraw(
+    options: RequestToWithdrawOptions
+  ): Promise<MomoResponse<RequestToWithdrawData>>
 }

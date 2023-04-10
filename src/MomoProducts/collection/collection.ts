@@ -13,6 +13,9 @@ import {
   BasicUserInfo,
   AccountHolder,
   AccountHolderStatus,
+  RequestToWithdrawData,
+  RequestToWithdrawOptions,
+  RequestToWithdrawHeaders,
 } from '../../types'
 import { CollectionEndPoints } from './endpoints'
 import { isNullOrUndefined } from '../../utils'
@@ -224,6 +227,63 @@ export class Collection extends MomoProduct implements ICollection {
           status_code: err.status,
           status_text: err.statusText,
           message: error.message,
+        },
+      }
+    }
+  }
+
+  public requestToWithdraw = async (
+    options: RequestToWithdrawOptions
+  ): Promise<MomoResponse<RequestToWithdrawData>> => {
+    const endPoint = `${this.generateUrl()}/${
+      CollectionEndPoints.REQUEST_TO_WITHDRAW
+    }`
+
+    const referenceId = uuid4()
+
+    try {
+      await this.getAuthorizationToken()
+
+      let requestToWithdrawHeaders: RequestToWithdrawHeaders = {
+        Authorization: this.authorizationToken as string,
+        'Content-Type': 'application/json',
+        'X-Target-Environment': this['X-Target-Environment'],
+        'X-Reference-Id': referenceId,
+        'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
+      }
+
+      if (
+        !isNullOrUndefined(this['X-Callback-Url']) &&
+        this['X-Target-Environment'] === 'live'
+      ) {
+        requestToWithdrawHeaders = {
+          ...requestToWithdrawHeaders,
+          'X-Callback-Url': this['X-Callback-Url'],
+        }
+      }
+
+      const response = await axios(endPoint, {
+        method: 'POST',
+        data: options,
+        headers: requestToWithdrawHeaders,
+      })
+
+      return {
+        data: {
+          status_code: response.status,
+          message: response.statusText,
+          referenceId,
+        },
+        error: null,
+      }
+    } catch (error: any) {
+      const err = error.response ? error.response : error
+      return {
+        data: null,
+        error: {
+          status_code: err.status,
+          status_text: err.statusText,
+          message: err.message,
         },
       }
     }
