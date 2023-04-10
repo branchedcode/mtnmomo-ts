@@ -93,6 +93,11 @@ export interface BasicUserInfo {
   readonly updated_at: number
 }
 
+export interface AccountBalanceData{
+  readonly availableBalance:string
+  readonly currency:string 
+}
+
 export interface ICollection {
   requestToPay(
     options: RequestToPayOptions
@@ -101,4 +106,5 @@ export interface ICollection {
     referenceId: string
   ): Promise<MomoResponse<RequestToPayTransactionStatus>>
   getBasicUserInfo(accountHolderMSISDN:string): Promise<MomoResponse<BasicUserInfo>>
+  getAccountBalance():Promise<MomoResponse<AccountBalanceData>>
 }
