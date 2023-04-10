@@ -9,6 +9,7 @@ import {
   RequestToPayData,
   RequestToPayHeaders,
   RequestToPayTransactionStatus,
+  AccountBalanceData,
   BasicUserInfo,
 } from '../../types'
 import { CollectionEndPoints } from './endpoints'
@@ -153,6 +154,36 @@ export class Collection extends MomoProduct implements ICollection {
           message: error.message,
         },
       }
+    }
+  }
+
+  public getAccountBalance=async(): Promise<MomoResponse<AccountBalanceData>>=>{
+    const endPoint=`${this.generateUrl()}/${CollectionEndPoints.GET_ACCOUNT_BALANCE}`
+    
+    try {
+      await this.getAuthorizationToken();
+
+      const response = await axios(endPoint, {
+        method: "GET",
+        headers: {
+          Authorization: this.authorizationToken as string,
+          "X-Target-Environment": this["X-Target-Environment"],
+          "Ocp-Apim-Subscription-Key": this["Ocp-Apim-Subscription-Key"],
+        },
+      });
+
+      const { data } = response;
+      return { data, error: null };
+    } catch (error: any) {
+      const err = error.response ? error.response : error;
+      return {
+        data: null,
+        error: {
+          status_code: err.status,
+          status_text: err.statusText,
+          message: error.message,
+        },
+      };
     }
   }
 }
