@@ -11,6 +11,8 @@ import {
   RequestToPayTransactionStatus,
   AccountBalanceData,
   BasicUserInfo,
+  AccountHolder,
+  AccountHolderStatus,
 } from '../../types'
 import { CollectionEndPoints } from './endpoints'
 import { isNullOrUndefined } from '../../utils'
@@ -143,7 +145,7 @@ export class Collection extends MomoProduct implements ICollection {
       return {
         data,
         error: null,
-      } 
+      }
     } catch (error: any) {
       const err = error.response ? error.response : error
       return {
@@ -157,25 +159,29 @@ export class Collection extends MomoProduct implements ICollection {
     }
   }
 
-  public getAccountBalance=async(): Promise<MomoResponse<AccountBalanceData>>=>{
-    const endPoint=`${this.generateUrl()}/${CollectionEndPoints.GET_ACCOUNT_BALANCE}`
-    
+  public getAccountBalance = async (): Promise<
+    MomoResponse<AccountBalanceData>
+  > => {
+    const endPoint = `${this.generateUrl()}/${
+      CollectionEndPoints.GET_ACCOUNT_BALANCE
+    }`
+
     try {
-      await this.getAuthorizationToken();
+      await this.getAuthorizationToken()
 
       const response = await axios(endPoint, {
-        method: "GET",
+        method: 'GET',
         headers: {
           Authorization: this.authorizationToken as string,
-          "X-Target-Environment": this["X-Target-Environment"],
-          "Ocp-Apim-Subscription-Key": this["Ocp-Apim-Subscription-Key"],
+          'X-Target-Environment': this['X-Target-Environment'],
+          'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
         },
-      });
+      })
 
-      const { data } = response;
-      return { data, error: null };
+      const { data } = response
+      return { data, error: null }
     } catch (error: any) {
-      const err = error.response ? error.response : error;
+      const err = error.response ? error.response : error
       return {
         data: null,
         error: {
@@ -183,7 +189,43 @@ export class Collection extends MomoProduct implements ICollection {
           status_text: err.statusText,
           message: error.message,
         },
-      };
+      }
+    }
+  }
+
+  public validateAccountHolderStatus = async (
+    options: AccountHolder
+  ): Promise<MomoResponse<AccountHolderStatus>> => {
+    const accountHolderIdType = options.accountHolderIdType.toLowerCase()
+    const accountHolderId = options.accountHolderId
+    const endPoint = `${this.generateUrl()}/${
+      CollectionEndPoints.VALIDATE_ACCOUNT_HOLDER_STATUS
+    }/${accountHolderIdType}/${accountHolderId}/active`
+
+    try {
+      await this.getAuthorizationToken()
+
+      const response = await axios(endPoint, {
+        method: 'GET',
+        headers: {
+          Authorization: this.authorizationToken as string,
+          'X-Target-Environment': this['X-Target-Environment'],
+          'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
+        },
+      })
+
+      const { data } = response
+      return { data, error: null }
+    } catch (error: any) {
+      const err = error.response ? error.response : error
+      return {
+        data: null,
+        error: {
+          status_code: err.status,
+          status_text: err.statusText,
+          message: error.message,
+        },
+      }
     }
   }
 }

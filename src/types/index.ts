@@ -18,6 +18,8 @@ export type Endpoints = {
   }
 }
 
+export type PartyId = 'MSISDN' | 'EMAIL' | 'PARTY_CODE'
+
 export interface CreateAccessToken {
   readonly expires_in: number
   readonly access_token: string
@@ -37,7 +39,7 @@ export interface RequestToPayOptions {
   readonly currency: string
   readonly externalId: string
   readonly payer: {
-    readonly partyIdType: 'MSISDN' | 'EMAIL' | 'PARTY_CODE'
+    readonly partyIdType: PartyId
     readonly partyId: string
   }
   readonly payerMessage: string
@@ -93,9 +95,18 @@ export interface BasicUserInfo {
   readonly updated_at: number
 }
 
-export interface AccountBalanceData{
-  readonly availableBalance:string
-  readonly currency:string 
+export interface AccountBalanceData {
+  readonly availableBalance: string
+  readonly currency: string
+}
+
+export interface AccountHolder{
+  readonly accountHolderId:string,
+  readonly accountHolderIdType:PartyId
+}
+
+export interface AccountHolderStatus{
+  readonly result:boolean
 }
 
 export interface ICollection {
@@ -105,6 +116,9 @@ export interface ICollection {
   requestToPayTransactionStatus(
     referenceId: string
   ): Promise<MomoResponse<RequestToPayTransactionStatus>>
-  getBasicUserInfo(accountHolderMSISDN:string): Promise<MomoResponse<BasicUserInfo>>
-  getAccountBalance():Promise<MomoResponse<AccountBalanceData>>
+  getBasicUserInfo(
+    accountHolderMSISDN: string
+  ): Promise<MomoResponse<BasicUserInfo>>
+  getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
+  validateAccountHolderStatus(options:AccountHolder):Promise<MomoResponse<AccountHolderStatus>>
 }
