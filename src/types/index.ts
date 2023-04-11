@@ -111,7 +111,11 @@ export interface AccountHolderStatus {
 
 export interface RequestToWithdrawOptions extends RequestToPayOptions {}
 export interface RequestToWithdrawData extends RequestToPayData {}
-export interface RequestToWithdrawHeaders extends RequestToPayHeaders{}
+export interface RequestToWithdrawHeaders extends RequestToPayHeaders {}
+export interface RequestToWithdrawTransactionStatus
+  extends RequestToPayTransactionStatus {
+  readonly financialTransactionId: string
+}
 
 export interface ICollection {
   requestToPay(
@@ -130,4 +134,7 @@ export interface ICollection {
   requestToWithdraw(
     options: RequestToWithdrawOptions
   ): Promise<MomoResponse<RequestToWithdrawData>>
+  requestToWithdrawTransactionStatus(
+    referenceId: string
+  ): Promise<MomoResponse<RequestToWithdrawTransactionStatus>>
 }
