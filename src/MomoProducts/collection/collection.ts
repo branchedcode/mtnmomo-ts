@@ -16,6 +16,7 @@ import {
   RequestToWithdrawData,
   RequestToWithdrawOptions,
   RequestToWithdrawHeaders,
+  RequestToWithdrawTransactionStatus,
 } from '../../types'
 import { CollectionEndPoints } from './endpoints'
 import { isNullOrUndefined } from '../../utils'
@@ -95,34 +96,7 @@ export class Collection extends MomoProduct implements ICollection {
       CollectionEndPoints.REQUEST_TO_PAY_TRANSACTION_STATUS
     }/${referenceId}`
 
-    try {
-      await this.getAuthorizationToken()
-      const response = await axios(endPoint, {
-        method: 'GET',
-        headers: {
-          Authorization: this.authorizationToken as string,
-          'X-Target-Environment': this['X-Target-Environment'],
-          'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
-        },
-      })
-
-      const { data } = response
-
-      return {
-        data,
-        error: null,
-      }
-    } catch (error: any) {
-      const err = error.response ? error.response : error
-      return {
-        data: null,
-        error: {
-          status_code: err.status,
-          status_text: err.statusText,
-          message: error.message,
-        },
-      }
-    }
+    return this.makeMomoGetRequest(endPoint)
   }
 
   public getBasicUserInfo = async (
@@ -132,34 +106,7 @@ export class Collection extends MomoProduct implements ICollection {
       CollectionEndPoints.GET_BASIC_USER_INFO
     }/${accountHolderMSISDN}/basicuserinfo`
 
-    try {
-      await this.getAuthorizationToken()
-
-      const response = await axios(endPoint, {
-        method: 'GET',
-        headers: {
-          Authorization: this.authorizationToken as string,
-          'X-Target-Environment': this['X-Target-Environment'],
-          'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
-        },
-      })
-
-      const { data } = response
-      return {
-        data,
-        error: null,
-      }
-    } catch (error: any) {
-      const err = error.response ? error.response : error
-      return {
-        data: null,
-        error: {
-          status_code: err.status,
-          status_text: err.statusText,
-          message: error.message,
-        },
-      }
-    }
+    return this.makeMomoGetRequest(endPoint)
   }
 
   public getAccountBalance = async (): Promise<
@@ -169,31 +116,7 @@ export class Collection extends MomoProduct implements ICollection {
       CollectionEndPoints.GET_ACCOUNT_BALANCE
     }`
 
-    try {
-      await this.getAuthorizationToken()
-
-      const response = await axios(endPoint, {
-        method: 'GET',
-        headers: {
-          Authorization: this.authorizationToken as string,
-          'X-Target-Environment': this['X-Target-Environment'],
-          'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
-        },
-      })
-
-      const { data } = response
-      return { data, error: null }
-    } catch (error: any) {
-      const err = error.response ? error.response : error
-      return {
-        data: null,
-        error: {
-          status_code: err.status,
-          status_text: err.statusText,
-          message: error.message,
-        },
-      }
-    }
+    return this.makeMomoGetRequest(endPoint)
   }
 
   public validateAccountHolderStatus = async (
@@ -205,31 +128,7 @@ export class Collection extends MomoProduct implements ICollection {
       CollectionEndPoints.VALIDATE_ACCOUNT_HOLDER_STATUS
     }/${accountHolderIdType}/${accountHolderId}/active`
 
-    try {
-      await this.getAuthorizationToken()
-
-      const response = await axios(endPoint, {
-        method: 'GET',
-        headers: {
-          Authorization: this.authorizationToken as string,
-          'X-Target-Environment': this['X-Target-Environment'],
-          'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
-        },
-      })
-
-      const { data } = response
-      return { data, error: null }
-    } catch (error: any) {
-      const err = error.response ? error.response : error
-      return {
-        data: null,
-        error: {
-          status_code: err.status,
-          status_text: err.statusText,
-          message: error.message,
-        },
-      }
-    }
+    return this.makeMomoGetRequest(endPoint)
   }
 
   public requestToWithdraw = async (
@@ -287,5 +186,14 @@ export class Collection extends MomoProduct implements ICollection {
         },
       }
     }
+  }
+
+  public requestToWithdrawTransactionStatus = (
+    referenceId: string
+  ): Promise<MomoResponse<RequestToWithdrawTransactionStatus>> => {
+    const endPoint = `${this.generateUrl()}/${
+      CollectionEndPoints.REQUEST_TO_WITHDRAW_TRANSACTION_STATUS
+    }/${referenceId}`
+    return this.makeMomoGetRequest(endPoint)
   }
 }

@@ -5,4 +5,5 @@ export enum CollectionEndPoints {
   GET_ACCOUNT_BALANCE = 'v1_0/account/balance',
   VALIDATE_ACCOUNT_HOLDER_STATUS = 'v1_0/accountholder',
   REQUEST_TO_WITHDRAW = 'v2_0/requesttowithdraw',
+  REQUEST_TO_WITHDRAW_TRANSACTION_STATUS = 'v1_0/requesttowithdraw',
 }
