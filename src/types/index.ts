@@ -138,3 +138,22 @@ export interface ICollection {
     referenceId: string
   ): Promise<MomoResponse<RequestToWithdrawTransactionStatus>>
 }
+
+export interface DepositOptions extends RequestToPayOptions {
+  readonly amount: string
+  readonly currency: string
+  readonly externalId: string
+  readonly payee: {
+    readonly partyIdType: PartyId
+    readonly partyId: string
+  }
+  readonly payerMessage: string
+  readonly payeeNote: string
+}
+
+export interface DepositHeaders extends RequestToPayHeaders {}
+export interface DepositData extends RequestToPayData {}
+
+export interface IDisbursement {
+  deposit(options: DepositOptions): Promise<MomoResponse<DepositData>>
+}

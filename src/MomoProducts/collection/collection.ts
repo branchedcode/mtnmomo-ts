@@ -188,7 +188,7 @@ export class Collection extends MomoProduct implements ICollection {
     }
   }
 
-  public requestToWithdrawTransactionStatus = (
+  public requestToWithdrawTransactionStatus = async (
     referenceId: string
   ): Promise<MomoResponse<RequestToWithdrawTransactionStatus>> => {
     const endPoint = `${this.generateUrl()}/${
