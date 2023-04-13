@@ -6,6 +6,7 @@ import {
   DepositData,
   DepositHeaders,
   DepositOptions,
+  BasicUserInfo,
   IDisbursement,
   MomoClientOptions,
   MomoResponse,
@@ -84,6 +85,16 @@ export class Disbursement extends MomoProduct implements IDisbursement {
     const endPoint = `${this.generateUrl()}/${
       DisbursementEndPoints.GET_ACCOUNT_BALANCE
     }`
+    return this.makeMomoGetRequest(endPoint)
+  }
+
+  public getBasicUserInfo = async (
+    accountHolderMSISDN: string
+  ): Promise<MomoResponse<BasicUserInfo>> => {
+    const endPoint = `${this.generateUrl()}/${
+      DisbursementEndPoints.GET_BASIC_USER_INFO
+    }/${accountHolderMSISDN}/basicuserinfo`
+
     return this.makeMomoGetRequest(endPoint)
   }
 }
