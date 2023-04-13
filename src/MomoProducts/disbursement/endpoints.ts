@@ -4,4 +4,5 @@ export enum DisbursementEndPoints {
   GET_BASIC_USER_INFO = 'v1_0/accountholder/msisdn',
   REFUND = 'v2_0/refund',
   TRANSFER = 'v1_0/transfer',
+  GET_DEPOSIT_STATUS="v1_0/deposit"
 }

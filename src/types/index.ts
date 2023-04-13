@@ -150,6 +150,10 @@ export interface DepositOptions {
   readonly payeeNote: string
 }
 
+export interface DepositStatus extends DepositOptions {
+  readonly status: TransactionStatus
+}
+
 export interface DepositData extends RequestToPayData {}
 
 export interface RefundOptions {
@@ -173,4 +177,5 @@ export interface IDisbursement {
   ): Promise<MomoResponse<BasicUserInfo>>
   refund(options: RefundOptions): Promise<MomoResponse<RefundData>>
   transfer(options: TransferOptions): Promise<MomoResponse<TransferData>>
+  getDepositStatus(referenceId: string): Promise<MomoResponse<DepositStatus>>
 }
