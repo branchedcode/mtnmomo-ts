@@ -172,6 +172,8 @@ export interface TransferStatus extends DepositStatus {
   readonly financialTransactionId: string
 }
 
+export interface RefundStatus extends TransferStatus {}
+
 export interface IDisbursement {
   deposit(options: DepositOptions): Promise<MomoResponse<DepositData>>
   getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
@@ -182,4 +184,5 @@ export interface IDisbursement {
   transfer(options: TransferOptions): Promise<MomoResponse<TransferData>>
   getDepositStatus(referenceId: string): Promise<MomoResponse<DepositStatus>>
   getTransferStatus(referenceId: string): Promise<MomoResponse<TransferStatus>>
+  getRefundStatus(referenceId: string): Promise<MomoResponse<RefundStatus>>
 }

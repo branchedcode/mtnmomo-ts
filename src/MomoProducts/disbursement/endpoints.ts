@@ -5,5 +5,6 @@ export enum DisbursementEndPoints {
   REFUND = 'v2_0/refund',
   TRANSFER = 'v1_0/transfer',
   GET_DEPOSIT_STATUS="v1_0/deposit",
-  GET_TRANSFER_STATUS="v1_0/transfer"
+  GET_TRANSFER_STATUS="v1_0/transfer",
+  GET_REFUND_STATUS="v1_0/refund"
 }
