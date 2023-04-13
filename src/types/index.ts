@@ -154,10 +154,22 @@ export interface DepositOptions extends RequestToPayOptions {
 export interface DepositHeaders extends RequestToPayHeaders {}
 export interface DepositData extends RequestToPayData {}
 
+export interface RefundHeaders extends RequestToPayHeaders {}
+export interface RefundOptions {
+  readonly amount: string
+  readonly currency: string
+  readonly externalId: string
+  readonly payerMessage: string
+  readonly payeeNote: string
+  readonly referenceIdToRefund: string
+}
+export interface RefundData extends RequestToPayData {}
+
 export interface IDisbursement {
   deposit(options: DepositOptions): Promise<MomoResponse<DepositData>>
   getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
   getBasicUserInfo(
     accountHolderMSISDN: string
   ): Promise<MomoResponse<BasicUserInfo>>
+  refund(options: RefundOptions): Promise<MomoResponse<RefundData>>
 }
