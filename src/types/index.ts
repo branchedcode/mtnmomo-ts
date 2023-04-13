@@ -185,4 +185,7 @@ export interface IDisbursement {
   getDepositStatus(referenceId: string): Promise<MomoResponse<DepositStatus>>
   getTransferStatus(referenceId: string): Promise<MomoResponse<TransferStatus>>
   getRefundStatus(referenceId: string): Promise<MomoResponse<RefundStatus>>
+  validateAccountHolderStatus(
+    options: AccountHolder
+  ): Promise<MomoResponse<AccountHolderStatus>>
 }

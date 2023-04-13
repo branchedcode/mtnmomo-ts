@@ -13,6 +13,8 @@ import {
   TransferOptions,
   DepositStatus,
   RefundStatus,
+  AccountHolder,
+  AccountHolderStatus,
 } from '../../types'
 import { MomoProduct } from '../momoProduct'
 import { DisbursementEndPoints } from './endpoints'
@@ -94,6 +96,18 @@ export class Disbursement extends MomoProduct implements IDisbursement {
     const endPoint = `${this.generateUrl()}/${
       DisbursementEndPoints.GET_TRANSFER_STATUS
     }/${referenceId}`
+
+    return this.makeMomoGetRequest(endPoint)
+  }
+
+  public validateAccountHolderStatus = (
+    options: AccountHolder
+  ): Promise<MomoResponse<AccountHolderStatus>> => {
+    const accountHolderIdType = options.accountHolderIdType.toLowerCase()
+    const accountHolderId = options.accountHolderId
+    const endPoint = `${this.generateUrl()}/${
+      DisbursementEndPoints.VALIDATE_ACCOUNT_HOLDER_STATUS
+    }/${accountHolderIdType}/${accountHolderId}/active`
 
     return this.makeMomoGetRequest(endPoint)
   }
