@@ -138,7 +138,7 @@ export interface ICollection {
   ): Promise<MomoResponse<RequestToWithdrawTransactionStatus>>
 }
 
-export interface DepositOptions{
+export interface DepositOptions {
   readonly amount: string
   readonly currency: string
   readonly externalId: string
@@ -162,6 +162,9 @@ export interface RefundOptions {
 }
 export interface RefundData extends RequestToPayData {}
 
+export interface TransferOptions extends DepositOptions {}
+export interface TransferData extends RequestToPayData {}
+
 export interface IDisbursement {
   deposit(options: DepositOptions): Promise<MomoResponse<DepositData>>
   getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
@@ -169,4 +172,5 @@ export interface IDisbursement {
     accountHolderMSISDN: string
   ): Promise<MomoResponse<BasicUserInfo>>
   refund(options: RefundOptions): Promise<MomoResponse<RefundData>>
+  transfer(options: TransferOptions): Promise<MomoResponse<TransferData>>
 }

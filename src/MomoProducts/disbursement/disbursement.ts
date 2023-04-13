@@ -8,6 +8,8 @@ import {
   MomoResponse,
   RefundData,
   RefundOptions,
+  TransferData,
+  TransferOptions,
 } from '../../types'
 import { MomoProduct } from '../momoProduct'
 import { DisbursementEndPoints } from './endpoints'
@@ -53,6 +55,13 @@ export class Disbursement extends MomoProduct implements IDisbursement {
     options: RefundOptions
   ): Promise<MomoResponse<RefundData>> => {
     const endPoint = `${this.generateUrl()}/${DisbursementEndPoints.REFUND}`
+    return this.makeMomoPostRequest(endPoint, options)
+  }
+
+  public transfer = async (
+    options: TransferOptions
+  ): Promise<MomoResponse<TransferData>> => {
+    const endPoint = `${this.generateUrl()}/${DisbursementEndPoints.TRANSFER}`
     return this.makeMomoPostRequest(endPoint, options)
   }
 }
