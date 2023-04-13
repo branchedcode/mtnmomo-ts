@@ -74,7 +74,7 @@ export interface MomoResponse<T> {
   readonly error: MomoError | null
 }
 
-export interface RequestToPayHeaders {
+export interface PostRequestHeaders {
   readonly [header: string]: string | undefined
   readonly 'Content-Type': string
   readonly 'Ocp-Apim-Subscription-Key': string
@@ -111,7 +111,6 @@ export interface AccountHolderStatus {
 
 export interface RequestToWithdrawOptions extends RequestToPayOptions {}
 export interface RequestToWithdrawData extends RequestToPayData {}
-export interface RequestToWithdrawHeaders extends RequestToPayHeaders {}
 export interface RequestToWithdrawTransactionStatus
   extends RequestToPayTransactionStatus {
   readonly financialTransactionId: string
@@ -137,4 +136,56 @@ export interface ICollection {
   requestToWithdrawTransactionStatus(
     referenceId: string
   ): Promise<MomoResponse<RequestToWithdrawTransactionStatus>>
+}
+
+export interface DepositOptions {
+  readonly amount: string
+  readonly currency: string
+  readonly externalId: string
+  readonly payee: {
+    readonly partyIdType: PartyId
+    readonly partyId: string
+  }
+  readonly payerMessage: string
+  readonly payeeNote: string
+}
+
+export interface DepositStatus extends DepositOptions {
+  readonly status: TransactionStatus
+}
+
+export interface DepositData extends RequestToPayData {}
+
+export interface RefundOptions {
+  readonly amount: string
+  readonly currency: string
+  readonly externalId: string
+  readonly payerMessage: string
+  readonly payeeNote: string
+  readonly referenceIdToRefund: string
+}
+export interface RefundData extends RequestToPayData {}
+
+export interface TransferOptions extends DepositOptions {}
+export interface TransferData extends RequestToPayData {}
+export interface TransferStatus extends DepositStatus {
+  readonly financialTransactionId: string
+}
+
+export interface RefundStatus extends TransferStatus {}
+
+export interface IDisbursement {
+  deposit(options: DepositOptions): Promise<MomoResponse<DepositData>>
+  getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
+  getBasicUserInfo(
+    accountHolderMSISDN: string
+  ): Promise<MomoResponse<BasicUserInfo>>
+  refund(options: RefundOptions): Promise<MomoResponse<RefundData>>
+  transfer(options: TransferOptions): Promise<MomoResponse<TransferData>>
+  getDepositStatus(referenceId: string): Promise<MomoResponse<DepositStatus>>
+  getTransferStatus(referenceId: string): Promise<MomoResponse<TransferStatus>>
+  getRefundStatus(referenceId: string): Promise<MomoResponse<RefundStatus>>
+  validateAccountHolderStatus(
+    options: AccountHolder
+  ): Promise<MomoResponse<AccountHolderStatus>>
 }

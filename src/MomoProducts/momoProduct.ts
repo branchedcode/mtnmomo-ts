@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { v4 as uuid4 } from 'uuid'
 
-import { MomoResponse, XTargetEnvironment } from '../types'
+import { MomoResponse, PostRequestHeaders, XTargetEnvironment } from '../types'
 import { isNullOrUndefined } from '../utils'
 
 export abstract class MomoProduct {
@@ -82,6 +83,60 @@ export abstract class MomoProduct {
           status_code: err.status,
           status_text: err.statusText,
           message: error.message,
+        },
+      }
+    }
+  }
+
+  protected makeMomoPostRequest = async (
+    url: string,
+    options: object
+  ): Promise<MomoResponse<any>> => {
+    const referenceId = uuid4()
+
+    try {
+      await this.getAuthorizationToken()
+
+      let requestHeaders: PostRequestHeaders = {
+        Authorization: this.authorizationToken as string,
+        'Content-Type': 'application/json',
+        'X-Target-Environment': this['X-Target-Environment'],
+        'X-Reference-Id': referenceId,
+        'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
+      }
+
+      if (
+        !isNullOrUndefined(this['X-Callback-Url']) &&
+        this['X-Target-Environment'] === 'live'
+      ) {
+        requestHeaders = {
+          ...requestHeaders,
+          'X-Callback-Url': this['X-Callback-Url'],
+        }
+      }
+
+      const response = await axios(url, {
+        method: 'POST',
+        data: options,
+        headers: requestHeaders,
+      })
+
+      return {
+        data: {
+          status_code: response.status,
+          message: response.statusText,
+          referenceId,
+        },
+        error: null,
+      }
+    } catch (error: any) {
+      const err = error.response ? error.response : error
+      return {
+        data: null,
+        error: {
+          status_code: err.status,
+          status_text: err.statusText,
+          message: err.message,
         },
       }
     }
