@@ -9,6 +9,7 @@ import {
   RefundData,
   RefundOptions,
   TransferData,
+  TransferStatus,
   TransferOptions,
   DepositStatus,
 } from '../../types'
@@ -71,6 +72,16 @@ export class Disbursement extends MomoProduct implements IDisbursement {
   ): Promise<MomoResponse<DepositStatus>> => {
     const endPoint = `${this.generateUrl()}/${
       DisbursementEndPoints.GET_DEPOSIT_STATUS
+    }/${referenceId}`
+
+    return this.makeMomoGetRequest(endPoint)
+  }
+
+  public getTransferStatus = async (
+    referenceId: string
+  ): Promise<MomoResponse<TransferStatus>> => {
+    const endPoint = `${this.generateUrl()}/${
+      DisbursementEndPoints.GET_TRANSFER_STATUS
     }/${referenceId}`
 
     return this.makeMomoGetRequest(endPoint)

@@ -168,6 +168,9 @@ export interface RefundData extends RequestToPayData {}
 
 export interface TransferOptions extends DepositOptions {}
 export interface TransferData extends RequestToPayData {}
+export interface TransferStatus extends DepositStatus {
+  readonly financialTransactionId: string
+}
 
 export interface IDisbursement {
   deposit(options: DepositOptions): Promise<MomoResponse<DepositData>>
@@ -178,4 +181,5 @@ export interface IDisbursement {
   refund(options: RefundOptions): Promise<MomoResponse<RefundData>>
   transfer(options: TransferOptions): Promise<MomoResponse<TransferData>>
   getDepositStatus(referenceId: string): Promise<MomoResponse<DepositStatus>>
+  getTransferStatus(referenceId: string): Promise<MomoResponse<TransferStatus>>
 }
