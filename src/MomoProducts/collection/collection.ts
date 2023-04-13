@@ -1,13 +1,9 @@
-import axios from 'axios'
-import { v4 as uuid4 } from 'uuid'
-
 import {
   MomoClientOptions,
   ICollection,
   RequestToPayOptions,
   MomoResponse,
   RequestToPayData,
-  RequestToPayHeaders,
   RequestToPayTransactionStatus,
   AccountBalanceData,
   BasicUserInfo,
@@ -15,11 +11,9 @@ import {
   AccountHolderStatus,
   RequestToWithdrawData,
   RequestToWithdrawOptions,
-  RequestToWithdrawHeaders,
   RequestToWithdrawTransactionStatus,
 } from '../../types'
 import { CollectionEndPoints } from './endpoints'
-import { isNullOrUndefined } from '../../utils'
 import { MomoProduct } from '../momoProduct'
 
 export class Collection extends MomoProduct implements ICollection {
@@ -39,54 +33,7 @@ export class Collection extends MomoProduct implements ICollection {
       CollectionEndPoints.REQUEST_TO_PAY
     }`
 
-    const referenceId = uuid4()
-
-    try {
-      await this.getAuthorizationToken()
-
-      let requestToPayHeaders: RequestToPayHeaders = {
-        Authorization: this.authorizationToken as string,
-        'Content-Type': 'application/json',
-        'X-Target-Environment': this['X-Target-Environment'],
-        'X-Reference-Id': referenceId,
-        'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
-      }
-
-      if (
-        !isNullOrUndefined(this['X-Callback-Url']) &&
-        this['X-Target-Environment'] === 'live'
-      ) {
-        requestToPayHeaders = {
-          ...requestToPayHeaders,
-          'X-Callback-Url': this['X-Callback-Url'],
-        }
-      }
-
-      const response = await axios(requestToPayEndPoint, {
-        method: 'POST',
-        data: options,
-        headers: requestToPayHeaders,
-      })
-
-      return {
-        data: {
-          status_code: response.status,
-          message: response.statusText,
-          referenceId,
-        },
-        error: null,
-      }
-    } catch (error: any) {
-      const err = error.response ? error.response : error
-      return {
-        data: null,
-        error: {
-          status_code: err.status,
-          status_text: err.statusText,
-          message: err.message,
-        },
-      }
-    }
+    return this.makeMomoPostRequest(requestToPayEndPoint, options)
   }
 
   public requestToPayTransactionStatus = async (
@@ -138,54 +85,7 @@ export class Collection extends MomoProduct implements ICollection {
       CollectionEndPoints.REQUEST_TO_WITHDRAW
     }`
 
-    const referenceId = uuid4()
-
-    try {
-      await this.getAuthorizationToken()
-
-      let requestToWithdrawHeaders: RequestToWithdrawHeaders = {
-        Authorization: this.authorizationToken as string,
-        'Content-Type': 'application/json',
-        'X-Target-Environment': this['X-Target-Environment'],
-        'X-Reference-Id': referenceId,
-        'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
-      }
-
-      if (
-        !isNullOrUndefined(this['X-Callback-Url']) &&
-        this['X-Target-Environment'] === 'live'
-      ) {
-        requestToWithdrawHeaders = {
-          ...requestToWithdrawHeaders,
-          'X-Callback-Url': this['X-Callback-Url'],
-        }
-      }
-
-      const response = await axios(endPoint, {
-        method: 'POST',
-        data: options,
-        headers: requestToWithdrawHeaders,
-      })
-
-      return {
-        data: {
-          status_code: response.status,
-          message: response.statusText,
-          referenceId,
-        },
-        error: null,
-      }
-    } catch (error: any) {
-      const err = error.response ? error.response : error
-      return {
-        data: null,
-        error: {
-          status_code: err.status,
-          status_text: err.statusText,
-          message: err.message,
-        },
-      }
-    }
+    return this.makeMomoPostRequest(endPoint, options)
   }
 
   public requestToWithdrawTransactionStatus = async (

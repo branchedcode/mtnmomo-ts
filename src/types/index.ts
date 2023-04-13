@@ -74,7 +74,7 @@ export interface MomoResponse<T> {
   readonly error: MomoError | null
 }
 
-export interface RequestToPayHeaders {
+export interface PostRequestHeaders {
   readonly [header: string]: string | undefined
   readonly 'Content-Type': string
   readonly 'Ocp-Apim-Subscription-Key': string
@@ -111,7 +111,6 @@ export interface AccountHolderStatus {
 
 export interface RequestToWithdrawOptions extends RequestToPayOptions {}
 export interface RequestToWithdrawData extends RequestToPayData {}
-export interface RequestToWithdrawHeaders extends RequestToPayHeaders {}
 export interface RequestToWithdrawTransactionStatus
   extends RequestToPayTransactionStatus {
   readonly financialTransactionId: string
@@ -139,7 +138,7 @@ export interface ICollection {
   ): Promise<MomoResponse<RequestToWithdrawTransactionStatus>>
 }
 
-export interface DepositOptions extends RequestToPayOptions {
+export interface DepositOptions{
   readonly amount: string
   readonly currency: string
   readonly externalId: string
@@ -151,10 +150,8 @@ export interface DepositOptions extends RequestToPayOptions {
   readonly payeeNote: string
 }
 
-export interface DepositHeaders extends RequestToPayHeaders {}
 export interface DepositData extends RequestToPayData {}
 
-export interface RefundHeaders extends RequestToPayHeaders {}
 export interface RefundOptions {
   readonly amount: string
   readonly currency: string

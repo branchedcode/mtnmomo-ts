@@ -1,10 +1,6 @@
-import axios from 'axios'
-import { v4 as uuid4 } from 'uuid'
-
 import {
   AccountBalanceData,
   DepositData,
-  DepositHeaders,
   DepositOptions,
   BasicUserInfo,
   IDisbursement,
@@ -12,9 +8,7 @@ import {
   MomoResponse,
   RefundData,
   RefundOptions,
-  RefundHeaders,
 } from '../../types'
-import { isNullOrUndefined } from '../../utils'
 import { MomoProduct } from '../momoProduct'
 import { DisbursementEndPoints } from './endpoints'
 
@@ -32,54 +26,8 @@ export class Disbursement extends MomoProduct implements IDisbursement {
     options: DepositOptions
   ): Promise<MomoResponse<DepositData>> => {
     const endPoint = `${this.generateUrl()}/${DisbursementEndPoints.DEPOSIT}`
-    const referenceId = uuid4()
 
-    try {
-      await this.getAuthorizationToken()
-
-      let depositHeaders: DepositHeaders = {
-        Authorization: this.authorizationToken as string,
-        'Content-Type': 'application/json',
-        'X-Target-Environment': this['X-Target-Environment'],
-        'X-Reference-Id': referenceId,
-        'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
-      }
-
-      if (
-        !isNullOrUndefined(this['X-Callback-Url']) &&
-        this['X-Target-Environment'] === 'live'
-      ) {
-        depositHeaders = {
-          ...depositHeaders,
-          'X-Callback-Url': this['X-Callback-Url'],
-        }
-      }
-
-      const response = await axios(endPoint, {
-        method: 'POST',
-        data: options,
-        headers: depositHeaders,
-      })
-
-      return {
-        data: {
-          status_code: response.status,
-          message: response.statusText,
-          referenceId,
-        },
-        error: null,
-      }
-    } catch (error: any) {
-      const err = error.response ? error.response : error
-      return {
-        data: null,
-        error: {
-          status_code: err.status,
-          status_text: err.statusText,
-          message: err.message,
-        },
-      }
-    }
+    return this.makeMomoPostRequest(endPoint, options)
   }
 
   public getAccountBalance = async (): Promise<
@@ -105,53 +53,6 @@ export class Disbursement extends MomoProduct implements IDisbursement {
     options: RefundOptions
   ): Promise<MomoResponse<RefundData>> => {
     const endPoint = `${this.generateUrl()}/${DisbursementEndPoints.REFUND}`
-    const referenceId = uuid4()
-
-    try {
-      await this.getAuthorizationToken()
-
-      let refundHeaders: RefundHeaders = {
-        Authorization: this.authorizationToken as string,
-        'Content-Type': 'application/json',
-        'X-Target-Environment': this['X-Target-Environment'],
-        'X-Reference-Id': referenceId,
-        'Ocp-Apim-Subscription-Key': this['Ocp-Apim-Subscription-Key'],
-      }
-
-      if (
-        !isNullOrUndefined(this['X-Callback-Url']) &&
-        this['X-Target-Environment'] === 'live'
-      ) {
-        refundHeaders = {
-          ...refundHeaders,
-          'X-Callback-Url': this['X-Callback-Url'],
-        }
-      }
-
-      const response = await axios(endPoint, {
-        method: 'POST',
-        data: options,
-        headers: refundHeaders,
-      })
-
-      return {
-        data: {
-          status_code: response.status,
-          message: response.statusText,
-          referenceId,
-        },
-        error: null,
-      }
-    } catch (error: any) {
-      const err = error.response ? error.response : error
-      return {
-        data: null,
-        error: {
-          status_code: err.status,
-          status_text: err.statusText,
-          message: err.message,
-        },
-      }
-    }
+    return this.makeMomoPostRequest(endPoint, options)
   }
 }
