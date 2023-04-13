@@ -2,6 +2,7 @@ import axios from 'axios'
 import { v4 as uuid4 } from 'uuid'
 
 import {
+  AccountBalanceData,
   DepositData,
   DepositHeaders,
   DepositOptions,
@@ -75,5 +76,14 @@ export class Disbursement extends MomoProduct implements IDisbursement {
         },
       }
     }
+  }
+
+  public getAccountBalance = async (): Promise<
+    MomoResponse<AccountBalanceData>
+  > => {
+    const endPoint = `${this.generateUrl()}/${
+      DisbursementEndPoints.GET_ACCOUNT_BALANCE
+    }`
+    return this.makeMomoGetRequest(endPoint)
   }
 }

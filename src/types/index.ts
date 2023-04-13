@@ -156,4 +156,5 @@ export interface DepositData extends RequestToPayData {}
 
 export interface IDisbursement {
   deposit(options: DepositOptions): Promise<MomoResponse<DepositData>>
+  getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
 }
