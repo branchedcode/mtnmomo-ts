@@ -189,3 +189,7 @@ export interface IDisbursement {
     options: AccountHolder
   ): Promise<MomoResponse<AccountHolderStatus>>
 }
+
+export interface IRemittance {
+  getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
+}
