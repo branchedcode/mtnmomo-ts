@@ -4,6 +4,8 @@ import {
   IRemittance,
   MomoClientOptions,
   MomoResponse,
+  TransferData,
+  TransferOptions,
 } from '../../types'
 import { MomoProduct } from '../momoProduct'
 import { RemittanceEndPoints } from './endpoints'
@@ -36,5 +38,13 @@ export class Remittance extends MomoProduct implements IRemittance {
     }/${accountHolderMSISDN}/basicuserinfo`
 
     return this.makeMomoGetRequest(endPoint)
+  }
+
+  public transfer = async (
+    options: TransferOptions
+  ): Promise<MomoResponse<TransferData>> => {
+    const endPoint = `${this.generateUrl()}/${RemittanceEndPoints.TRANSFER}`
+
+    return this.makeMomoPostRequest(endPoint, options)
   }
 }

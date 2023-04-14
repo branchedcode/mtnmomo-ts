@@ -195,4 +195,5 @@ export interface IRemittance {
   getBasicUserInfo(
     accountHolderMSISDN: string
   ): Promise<MomoResponse<BasicUserInfo>>
+  transfer(options: TransferOptions): Promise<MomoResponse<TransferData>>
 }
