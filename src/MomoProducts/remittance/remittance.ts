@@ -7,6 +7,8 @@ import {
   TransferData,
   TransferStatus,
   TransferOptions,
+  AccountHolder,
+  AccountHolderStatus,
 } from '../../types'
 import { MomoProduct } from '../momoProduct'
 import { RemittanceEndPoints } from './endpoints'
@@ -55,6 +57,18 @@ export class Remittance extends MomoProduct implements IRemittance {
     const endPoint = `${this.generateUrl()}/${
       RemittanceEndPoints.GET_TRANSFER_STATUS
     }/${referenceId}`
+    return this.makeMomoGetRequest(endPoint)
+  }
+
+  public validateAccountHolderStatus = async (
+    options: AccountHolder
+  ): Promise<MomoResponse<AccountHolderStatus>> => {
+    const accountHolderIdType = options.accountHolderIdType.toLowerCase()
+    const accountHolderId = options.accountHolderId
+    const endPoint = `${this.generateUrl()}/${
+      RemittanceEndPoints.VALIDATE_ACCOUNT_HOLDER_STATUS
+    }/${accountHolderIdType}/${accountHolderId}/active`
+
     return this.makeMomoGetRequest(endPoint)
   }
 }
