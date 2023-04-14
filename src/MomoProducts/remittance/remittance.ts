@@ -1,5 +1,6 @@
 import {
   AccountBalanceData,
+  BasicUserInfo,
   IRemittance,
   MomoClientOptions,
   MomoResponse,
@@ -23,6 +24,16 @@ export class Remittance extends MomoProduct implements IRemittance {
     const endPoint = `${this.generateUrl()}/${
       RemittanceEndPoints.GET_ACCOUNT_BALANCE
     }`
+
+    return this.makeMomoGetRequest(endPoint)
+  }
+
+  public getBasicUserInfo = async (
+    accountHolderMSISDN: string
+  ): Promise<MomoResponse<BasicUserInfo>> => {
+    const endPoint = `${this.generateUrl()}/${
+      RemittanceEndPoints.GET_BASIC_USER_INFO
+    }/${accountHolderMSISDN}/basicuserinfo`
 
     return this.makeMomoGetRequest(endPoint)
   }

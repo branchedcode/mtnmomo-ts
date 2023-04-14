@@ -192,4 +192,7 @@ export interface IDisbursement {
 
 export interface IRemittance {
   getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
+  getBasicUserInfo(
+    accountHolderMSISDN: string
+  ): Promise<MomoResponse<BasicUserInfo>>
 }
