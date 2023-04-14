@@ -189,3 +189,15 @@ export interface IDisbursement {
     options: AccountHolder
   ): Promise<MomoResponse<AccountHolderStatus>>
 }
+
+export interface IRemittance {
+  getAccountBalance(): Promise<MomoResponse<AccountBalanceData>>
+  getBasicUserInfo(
+    accountHolderMSISDN: string
+  ): Promise<MomoResponse<BasicUserInfo>>
+  transfer(options: TransferOptions): Promise<MomoResponse<TransferData>>
+  getTransferStatus(referenceId: string): Promise<MomoResponse<TransferStatus>>
+  validateAccountHolderStatus(
+    options: AccountHolder
+  ): Promise<MomoResponse<AccountHolderStatus>>
+}
