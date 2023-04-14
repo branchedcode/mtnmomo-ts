@@ -5,6 +5,7 @@ import {
   MomoClientOptions,
   MomoResponse,
   TransferData,
+  TransferStatus,
   TransferOptions,
 } from '../../types'
 import { MomoProduct } from '../momoProduct'
@@ -46,5 +47,14 @@ export class Remittance extends MomoProduct implements IRemittance {
     const endPoint = `${this.generateUrl()}/${RemittanceEndPoints.TRANSFER}`
 
     return this.makeMomoPostRequest(endPoint, options)
+  }
+
+  public getTransferStatus = async (
+    referenceId: string
+  ): Promise<MomoResponse<TransferStatus>> => {
+    const endPoint = `${this.generateUrl()}/${
+      RemittanceEndPoints.GET_TRANSFER_STATUS
+    }/${referenceId}`
+    return this.makeMomoGetRequest(endPoint)
   }
 }

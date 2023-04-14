@@ -196,4 +196,5 @@ export interface IRemittance {
     accountHolderMSISDN: string
   ): Promise<MomoResponse<BasicUserInfo>>
   transfer(options: TransferOptions): Promise<MomoResponse<TransferData>>
+  getTransferStatus(referenceId: string): Promise<MomoResponse<TransferStatus>>
 }
